@@ -84,6 +84,33 @@ function _initElement(select) {
     select.optionsElement.classList.remove("show")
   })
 
+  //Keyboard support
+  select.element.addEventListener("keydown", e => {
+    switch (e.code) {
+      case "Space"://Show list
+        select.optionsElement.classList.toggle("show")
+        break
+      case "ArrowUp": { //Selects prev
+        const prevOption = select.optionsList[select.selectedOptionIndex - 1]
+        if (prevOption) {
+          select.selectValue(prevOption.value)
+        }
+        break
+      }
+      case "ArrowDown": {//Selects next
+        const nextOption = select.optionsList[select.selectedOptionIndex + 1]
+        if (nextOption) {
+          select.selectValue(nextOption.value)
+        }
+        break
+      }
+      case "Enter":
+      case "Escape"://Hides list
+        select.optionsElement.classList.remove("show")
+        break
+      
+    }
+  })
 }
 
 function getOptionsList(optionElements) {
