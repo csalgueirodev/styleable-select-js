@@ -1,0 +1,25 @@
+/*Initial Styles*/
+.styleable-select-container,
+.styleable-select-value, 
+.styleable-select-options, 
+.styleable-select-option {
+  box-sizing: border-box;
+}
+
+.styleable-select-container {
+  display: inline-block;
+  position: relative;
+}
+
+/*Styles for the value box*/
+.styleable-select-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100px;
+  border: 1px solid black;
+  padding: .25rem .5rem;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 5px;
+}
