@@ -1,15 +1,15 @@
 export default class StyleableSelect {
-  constructor(element) {
-    this.element = element
-    this.optionsList = getOptionsList(element.querySelectorAll("option"))
+  constructor(select) {
+    this.select = select
+    this.optionsList = getOptionsList(select.querySelectorAll("option"))
     this.element = document.createElement("div")
     this.label = document.createElement("span")
     this.optionsElement = document.createElement("ul")
-    initElement(this)
+    _initElement(this)
     
     //Hide select and add custom styleable element to the DOM
-    element.style.display = "none"
-    element.after(this.element)
+    select.style.display = "none"
+    select.after(this.element)
   }
 
   get selectedOption() {
@@ -20,9 +20,35 @@ export default class StyleableSelect {
     return this.optionsList.indexOf(this.selectedOption)
   }
 
+  selectValue(value) {
+    const selectedOption = this.optionsList.find(option => {
+      return option.value === value
+    })
+    //Get selected option and remove class selected
+    const prevSelectedOption = this.selectedOption
+    prevSelectedOption.selected = false
+    prevSelectedOption.element.selected = false
+    this.optionsElement.querySelector(`[data-value="${prevSelectedOption.value}"]`).classList.remove("selected")
+
+    selectedOption.selected = true
+    selectedOption.element.selected = true
+
+    //Add value and class selected to selected option
+    this.label.innerText = selectedOption.label
+    const newelement = this.optionsElement.querySelector(`[data-value="${selectedOption.value}"]`)
+    newelement.classList.add("selected")
+
+    //scroll of the box always centered
+    newelement.scrollIntoView({ block: "nearest" })
+  } 
 }
 
-function initElement(select) {
+/**
+ * _initElement
+ * @param select Instance of StyleableSelect
+ * private method to init elements
+ */
+function _initElement(select) {
   //Adds classes to new elements
   select.element.classList.add("styleable-select-container")
   select.element.tabIndex = 0
@@ -41,6 +67,7 @@ function initElement(select) {
 
     optionElement.innerText = option.label
     optionElement.dataset.value = option.value
+
     optionElement.addEventListener("click", () => {
       select.selectValue(option.value)
       select.optionsElement.classList.remove("show")
@@ -49,7 +76,14 @@ function initElement(select) {
   })
   select.element.append(select.optionsElement)
 
-  
+  select.label.addEventListener("click", () => {
+    select.optionsElement.classList.toggle("show")
+  })
+
+  select.element.addEventListener("blur", () => {
+    select.optionsElement.classList.remove("show")
+  })
+
 }
 
 function getOptionsList(optionElements) {
