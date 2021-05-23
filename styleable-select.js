@@ -30,6 +30,9 @@ export default class StyleableSelect {
     return this.optionsList.indexOf(this.selectedOption)
   }
 
+  val(value) {
+    this.selectValue(value)
+  }
   selectValue(value) {
     const selectedOption = this.optionsList.find(option => {
       return option.value === value
