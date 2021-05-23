@@ -23,3 +23,25 @@
   user-select: none;
   border-radius: 5px;
 }
+
+/*Styles for the options box*/
+.styleable-select-options {
+  display: none;
+  position: absolute;
+  padding: 5px;
+  margin: 0;
+  border: 2px solid black;
+  width: 100%;
+  border-top: none;
+  max-height: 200px;
+  overflow-y: auto; 
+}
+
+.styleable-select-options.show {
+  display: block;
+}
+
+.styleable-select-option {
+  padding: .25rem .5rem;
+  cursor: pointer;
+}
