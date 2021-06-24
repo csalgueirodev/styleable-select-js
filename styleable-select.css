@@ -1,18 +1,18 @@
 /*Initial Styles*/
-.styleable-select-container,
-.styleable-select-value, 
-.styleable-select-options, 
-.styleable-select-option {
+.styleable-select__container,
+.styleable-select__value, 
+.styleable-select__list, 
+.styleable-select__item {
   box-sizing: border-box;
 }
 
-.styleable-select-container {
+.styleable-select__container {
   display: inline-block;
   position: relative;
 }
 
 /*Styles for the value box*/
-.styleable-select-value {
+.styleable-select__value {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -25,11 +25,11 @@
 }
 
 /*CSS trick for arrowdown*/
-.styleable-select-container:focus > .styleable-select-value {
+.styleable-select__container:focus > .styleable-select__value {
   border-width: 2px;
   outline: none;
 }
-.styleable-select-value::after {
+.styleable-select__value::after {
   content: '';
   display: inline-block;
   border: 4px solid transparent;
@@ -38,8 +38,8 @@
   margin-top: 4px;
 }
 
-/*Styles for the options box*/
-.styleable-select-options {
+/*Styles for the list box*/
+.styleable-select__list {
   display: none;
   position: absolute;
   padding: 0;
@@ -52,21 +52,18 @@
   overflow-y: auto; 
   z-index: 9;
 }
-
-.styleable-select-options.show {
+.styleable-select__list--show {
   display: block;
 }
+.styleable-select__list--selected {
+  background-color: #f85050;
+}
 
-.styleable-select-option {
+.styleable-select__item {
   color: #FFF;
   padding: .25rem .5rem;
   cursor: pointer;
 }
-
-.styleable-select-option:hover {
+.styleable-select__item:hover {
   background-color: #f850508f;
-}
-
-.styleable-select-option.selected {
-  background-color: #f85050;
 }

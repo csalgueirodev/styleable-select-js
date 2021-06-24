@@ -1,10 +1,10 @@
 const CONFIG = {
-  containerClass: "styleable-select-container",
-  valueClass: "styleable-select-value",
-  listClass: "styleable-select-options",
-  itemClass: "styleable-select-option",
-  showClass: "show",
-  selectedClass: "selected",
+  containerClass: "styleable-select__container",
+  valueClass: "styleable-select__value",
+  listClass: "styleable-select__list",
+  itemClass: "styleable-select__item",
+  showClass: "styleable-select__list--show",
+  selectedClass: "styleable-select__list--selected",
   timeBetweenKeyStrokes: 300
 }
 
@@ -61,19 +61,19 @@ export default class StyleableSelect {
  * @param select Instance of StyleableSelect
  * private method to init elements
  */
-function _initElement(select) {
+function _initElement(s) {
   //Adds classes to new elements
-  select.element.classList.add(CONFIG.containerClass)
-  select.element.tabIndex = 0
+  s.element.classList.add(CONFIG.containerClass)
+  s.element.tabIndex = 0
 
-  select.label.classList.add(CONFIG.valueClass)
-  select.label.innerText = select.selectedOption.label
-  select.element.append(select.label)
+  s.label.classList.add(CONFIG.valueClass)
+  s.label.innerText = s.selectedOption.label
+  s.element.append(s.label)
 
-  select.optionsElement.classList.add(CONFIG.listClass)
+  s.optionsElement.classList.add(CONFIG.listClass)
 
   //Adds optionsList to optionsElement
-  select.optionsList.forEach(option => {
+  s.optionsList.forEach(option => {
     const optionElement = document.createElement("li")
     optionElement.classList.add(CONFIG.itemClass)
     optionElement.classList.toggle(CONFIG.selectedClass, option.selected)
@@ -82,46 +82,48 @@ function _initElement(select) {
     optionElement.dataset.value = option.value
 
     optionElement.addEventListener("click", () => {
-      select.selectValue(option.value)
-      select.optionsElement.classList.remove(CONFIG.showClass)
+      s.selectValue(option.value)
+      s.optionsElement.classList.remove(CONFIG.showClass)
     })
-    select.optionsElement.append(optionElement)
+    s.optionsElement.append(optionElement)
   })
-  select.element.append(select.optionsElement)
+  s.element.append(s.optionsElement)
 
-  select.label.addEventListener("click", () => {
-    select.optionsElement.classList.toggle(CONFIG.showClass)
+  s.label.addEventListener("click", () => {
+    s.optionsElement.classList.toggle(CONFIG.showClass)
   })
 
-  select.element.addEventListener("blur", () => {
-    select.optionsElement.classList.remove(CONFIG.showClass)
+  s.element.addEventListener("blur", () => {
+    s.optionsElement.classList.remove(CONFIG.showClass)
   })
 
   //Keyboard support
   let term = ""
   let debounceTimeout
-  select.element.addEventListener("keydown", e => {
+  s.element.addEventListener("keydown", e => {
     switch (e.code) {
+      case "ArrowLeft":
       case "ArrowUp": { //Selects prev
-        const prevOption = select.optionsList[select.selectedOptionIndex - 1]
+        const prevOption = s.optionsList[s.selectedOptionIndex - 1]
         if (prevOption) {
-          select.selectValue(prevOption.value)
+          s.selectValue(prevOption.value)
         }
         break
       }
+      case "ArrowRight":
       case "ArrowDown": {//Selects next
-        const nextOption = select.optionsList[select.selectedOptionIndex + 1]
+        const nextOption = s.optionsList[s.selectedOptionIndex + 1]
         if (nextOption) {
-          select.selectValue(nextOption.value)
+          s.selectValue(nextOption.value)
         }
         break
       }
       case "Space"://Show list
-        select.optionsElement.classList.toggle(CONFIG.showClass)
+        s.optionsElement.classList.toggle(CONFIG.showClass)
         break
       case "Enter":
       case "Escape"://Hides list
-        select.optionsElement.classList.remove(CONFIG.showClass)
+        s.optionsElement.classList.remove(CONFIG.showClass)
         break
 
       default: {
@@ -133,16 +135,31 @@ function _initElement(select) {
           term = ""
         }, CONFIG.timeBetweenKeyStrokes)
 
-        const searchedOption = select.optionsList.find(option => {
+        const searchedOption = s.optionsList.find(option => {
           //Function to find first item with search term
           return option.label.toLowerCase().startsWith(term)
         })
         if (searchedOption) {
-          select.selectValue(searchedOption.value)
+          s.selectValue(searchedOption.value)
         }
       }
     }
   })
+
+
+  //Adds aria support
+  const id = s.select.id;
+  s.select.setAttribute("aria-role", "listbox");
+  if (id) {
+    const labelElement = document.querySelector(`label[for='${id}']`)
+    labelElement.setAttribute("aria-label", labelElement.innerText);
+    labelElement.id = s.select.id + "Label";
+    labelElement.addEventListener("click", (e) => {
+      s.optionsElement.classList.toggle(CONFIG.showClass)
+    })
+
+    s.select.setAttribute("aria-labeledby", labelElement.id);
+  }
 }
 
 /**

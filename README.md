@@ -37,12 +37,12 @@ styleableSelect.val("valueOfYourSelect")
 Initial config can be changed by modifing this object at the beginning of `styleable-select.js` 
 ```Javascript
 const CONFIG = {
-  containerClass: "styleable-select-container",
-  valueClass: "styleable-select-value",
-  listClass: "styleable-select-options",
-  itemClass: "styleable-select-option",
-  showClass: "show",
-  selectedClass: "selected",
+  containerClass: "styleable-select__container",
+  valueClass: "styleable-select__value",
+  listClass: "styleable-select__list",
+  itemClass: "styleable-select__item",
+  showClass: "styleable-select__list--show",
+  selectedClass: "styleable-select__list--selected",
   timeBetweenKeyStrokes: 300
 }
 ```
